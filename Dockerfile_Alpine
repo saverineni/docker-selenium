@@ -1,0 +1,32 @@
+FROM openjdk:8u151-jdk-alpine3.7
+
+RUN \
+    apk --no-cache update \
+    && apk add --no-cache --upgrade apk-tools \
+    && apk upgrade --no-cache --available \
+    && apk add --no-cache --virtual .build-deps \
+       gifsicle pngcrush optipng libjpeg-turbo-utils \
+       udev ttf-freefont \
+    && rm -rf /var/cache/apk/* /tmp/*
+
+ENV CHROMEDRIVER_DIR /docker-selenium
+ENV CHROMEDRIVER_VERSION 2.35
+RUN mkdir $CHROMEDRIVER_DIR
+
+#RUN wget http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+RUN wget -q --continue -P $CHROMEDRIVER_DIR http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+RUN unzip $CHROMEDRIVER_DIR/chromedriver_* -d $CHROMEDRIVER_DIR
+
+ENV PATH $CHROMEDRIVER_DIR:$PATH
+
+RUN apk add chromium --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ --allow-untrusted
+
+RUN apk add maven
+RUN mvn --version
+
+ADD pom.xml /docker-selenium/
+ADD src /docker-selenium/src
+ADD test /docker-selenium/test
+WORKDIR /docker-selenium/
+
+ENTRYPOINT ["tail", "-f", "/dev/null"]
