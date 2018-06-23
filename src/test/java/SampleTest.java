@@ -10,8 +10,8 @@ public class SampleTest {
 
     @Test
     public void sampleTest() {
-        //String chromepath = "/chromedriver/chromedriver";
-        String chromepath = "/docker-selenium/test/drivers/linux/chrome/chromedriver";
+        String chromepath = "/chromedriver/chromedriver";
+//        String chromepath = "/docker-selenium/test/drivers/linux/chrome/chromedriver";
         System.setProperty("webdriver.chrome.driver", chromepath);
 
         ChromeOptions options = new ChromeOptions();

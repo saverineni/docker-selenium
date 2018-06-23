@@ -12,14 +12,14 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
   && rm /etc/apt/sources.list.d/google-chrome.list \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
-#ARG chrome_driver_version=2.38
-#ARG CHROMEDRIVER_DIR=/chromedriver
-#RUN echo "chrome driver version $chrome_driver_version"
-#
-## Download and install ChromeDriver
-#RUN mkdir $CHROMEDRIVER_DIR
-#RUN wget -q --continue -P $CHROMEDRIVER_DIR "http://chromedriver.storage.googleapis.com/$chrome_driver_version/chromedriver_linux64.zip"
-#RUN unzip $CHROMEDRIVER_DIR/chromedriver* -d $CHROMEDRIVER_DIR
+ARG chrome_driver_version=2.38
+ARG CHROMEDRIVER_DIR=/chromedriver
+RUN echo "chrome driver version $chrome_driver_version"
+
+# Download and install ChromeDriver
+RUN mkdir $CHROMEDRIVER_DIR
+RUN wget -q --continue -P $CHROMEDRIVER_DIR "http://chromedriver.storage.googleapis.com/$chrome_driver_version/chromedriver_linux64.zip"
+RUN unzip $CHROMEDRIVER_DIR/chromedriver* -d $CHROMEDRIVER_DIR
 
 ADD pom.xml /docker-selenium/
 ADD src /docker-selenium/src
